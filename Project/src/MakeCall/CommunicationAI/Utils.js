@@ -4,7 +4,7 @@ export const acsOpenAiPromptsApi = {
     summary: 'getSummary',
     feedback: 'getPersonalFeedback',
     sentiment: 'GetSentiments',
-    supportAgent: 'GetSuggestionForXBoxSupportAgent',
+    supportAgent: 'getSuggestionForSupportAgent',
     callInsights: 'CallInsights',
     getBriefSummary: 'GetBriefSummary'
 }

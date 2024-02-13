@@ -21,7 +21,7 @@ const CommunicationAI = ({ call, isAgentSpeaking, isUserSpeaking }) => {
 
     // Support Agent
     const [lastSupportAgentResponse, setLastSupportAgentResponse] = useState("");
-    const [captionsSupportAgentResponseIndex, setCaptionsSupportAgentResponseIndex] = useState(0);
+    const [setCaptionsSupportAgentResponseIndex] = useState(0);
 
     const [promptMessage, setPromptMessage] = useState("");
 
@@ -45,7 +45,7 @@ const CommunicationAI = ({ call, isAgentSpeaking, isUserSpeaking }) => {
         { key: 'getSummary', text: 'Get Summary' },
         { key: 'getPersonalFeedBack', text: 'Get Personal Feedback' },
         { key: 'getSentiments', text: 'Get Sentiment Feedback' },
-        { key: 'getSuggestionForXBoxSupportAgent', text: 'Get Suggestion for Agent' },
+        { key: 'getSuggestionForSupportAgent', text: 'Get Suggestion for Agent' },
     ]
     let agentDebounceTimeoutFn;
     let userDebounceTimeoutFn;
@@ -65,7 +65,7 @@ const CommunicationAI = ({ call, isAgentSpeaking, isUserSpeaking }) => {
             return
         }
         clearTimeout(agentDebounceTimeoutFn);
-        if (dropDownLabel != "getSuggestionForXBoxSupportAgent") {
+        if (dropDownLabel != "getSuggestionForSupportAgent") {
             if (isAgentSpeaking && !agentDebounceCounterRunning) {
                 const message = "FeedBack will be retrieved after you finish talking";
                 !showSpinner && setShowSpinner(true);
@@ -91,7 +91,7 @@ const CommunicationAI = ({ call, isAgentSpeaking, isUserSpeaking }) => {
             return
         }
         clearTimeout(userDebounceTimeoutFn);
-        if (isUserSpeaking && dropDownLabel == "getSuggestionForXBoxSupportAgent" && !userDebounceCounterRunning) {
+        if (isUserSpeaking && dropDownLabel == "getSuggestionForSupportAgent" && !userDebounceCounterRunning) {
             const message = "Support Suggestion will be retrieved after User finishes talking";
             !showSpinner && setShowSpinner(true);
             setPromptMessage(message);
@@ -122,8 +122,8 @@ const CommunicationAI = ({ call, isAgentSpeaking, isUserSpeaking }) => {
             case "getSentiments":
                 await getSentiment().finally(() => setShowSpinner(false));
                 break;
-            case "getSuggestionForXBoxSupportAgent":
-                await getSuggestionForXBoxSupportAgent().finally(() => setShowSpinner(false));
+            case "getSuggestionForSupportAgent":
+                await getSuggestionForSupportAgent().finally(() => setShowSpinner(false));
                 break;
         }
     }
@@ -178,12 +178,12 @@ const CommunicationAI = ({ call, isAgentSpeaking, isUserSpeaking }) => {
         }
     }
 
-    const getSuggestionForXBoxSupportAgent = async () => {
+    const getSuggestionForSupportAgent = async () => {
         try {
             let response = await utils.sendCaptionsDataToAcsOpenAI(acsOpenAiPromptsApi.supportAgent, 
                     displayName, lastSupportAgentResponse, window.captionHistory, true)
             let content = response.suggested_reply;
-            console.log(`getSuggestionForXBoxSupportAgent ===> ${JSON.stringify(response)}`)
+            console.log(`getSuggestionForSupportAgent ===> ${JSON.stringify(response)}`)
             console.log(`form_data ===> ${JSON.stringify(response.form_data)}`)
             retrieveFormData(response.form_data)
             setLastSupportAgentResponse(content);
@@ -237,7 +237,7 @@ const CommunicationAI = ({ call, isAgentSpeaking, isUserSpeaking }) => {
 
         if(!responseText || !responseText.length) {return;}
 
-        if (dropDownLabel == "getSuggestionForXBoxSupportAgent" || dropDownLabel == "getSentiments") {
+        if (dropDownLabel == "getSuggestionForSupportAgent" || dropDownLabel == "getSentiments") {
             captionAreasContainer.style['font-size'] = '13px';
             captionAreasContainer.innerText  = responseText;
         } else {
@@ -301,12 +301,12 @@ const CommunicationAI = ({ call, isAgentSpeaking, isUserSpeaking }) => {
                 }
 
                 {
-                    dropDownLabel == "getSuggestionForXBoxSupportAgent" && 
+                    dropDownLabel == "getSuggestionForSupportAgent" && 
                     <div className="card">
                         <div className="ms-Grid">
                             <div className="ms-Grid-row">
                                 <div className="scrollable-captions-container ms-Grid-col ms-Grid-col ms-sm6 ms-md6 ms-lg6">
-                                    <div id="getSuggestionForXBoxSupportAgent" className="captions-area">
+                                    <div id="getSuggestionForSupportAgent" className="captions-area">
                                         {lastSupportAgentResponse}
                                     </div>
                                 </div>
